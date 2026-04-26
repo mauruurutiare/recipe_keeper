@@ -15,3 +15,8 @@ git add <files>
 git commit -m "description of change"
 git push
 ```
+
+## デプロイ情報
+
+- 本番URL：https://recipe-keeper-beta.vercel.app
+- Supabaseプロジェクト名：recipe_keeper
