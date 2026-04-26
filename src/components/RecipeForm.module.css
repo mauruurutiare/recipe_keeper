@@ -73,6 +73,15 @@
   border-color: #e8732a;
 }
 
+.error {
+  color: #d94040;
+  background: #fff0f0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;

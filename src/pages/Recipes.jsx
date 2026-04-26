@@ -35,7 +35,8 @@ export default function Recipes() {
       const data = await fetchRecipes()
       setRecipes(data)
     } catch (e) {
-      setFetchError('レシピの取得に失敗しました。')
+      console.error('レシピ取得エラー:', e)
+      setFetchError(`レシピの取得に失敗しました。（${e.message}）`)
     } finally {
       setFetchLoading(false)
     }
@@ -63,7 +64,8 @@ export default function Recipes() {
       setRecipes((prev) => [newRecipe, ...prev])
       setFormMode(null)
     } catch (e) {
-      setFormError('登録に失敗しました。')
+      console.error('レシピ登録エラー:', e)
+      setFormError(`登録に失敗しました。（${e.message}）`)
     } finally {
       setFormLoading(false)
     }
@@ -83,7 +85,8 @@ export default function Recipes() {
       setFormMode(null)
       setEditTarget(null)
     } catch (e) {
-      setFormError('更新に失敗しました。')
+      console.error('レシピ更新エラー:', e)
+      setFormError(`更新に失敗しました。（${e.message}）`)
     } finally {
       setFormLoading(false)
     }
