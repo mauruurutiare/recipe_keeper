@@ -1,0 +1,200 @@
+/* レシピ一覧ページ */
+.page {
+  min-height: 100vh;
+  background: #fdf8f4;
+}
+
+/* ヘッダー */
+.header {
+  background: white;
+  border-bottom: 2px solid #f0e0d0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo span {
+  font-size: 1.75rem;
+}
+
+.logo h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d1a0e;
+  margin: 0;
+}
+
+.userArea {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #8a6a50;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signOutBtn {
+  padding: 0.4rem 1rem;
+  background: transparent;
+  border: 2px solid #e8732a;
+  color: #e8732a;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.signOutBtn:hover {
+  background: #e8732a;
+  color: white;
+}
+
+/* メインコンテンツ */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d1a0e;
+  margin: 0 0 0.25rem;
+}
+
+.sectionSub {
+  color: #8a6a50;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* レシピカードグリッド */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+/* カード */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(232, 115, 42, 0.15);
+}
+
+.cardHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.recipeEmoji {
+  font-size: 2.25rem;
+  flex-shrink: 0;
+}
+
+.cardTitle {
+  flex: 1;
+}
+
+.cardTitle h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d1a0e;
+}
+
+.category {
+  display: inline-block;
+  background: #fff0e5;
+  color: #e8732a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+}
+
+.chevron {
+  color: #c0a090;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* カード展開部分 */
+.cardBody {
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid #f5ece5;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4a3728;
+  margin: 1rem 0 0.5rem;
+}
+
+.ingredientList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ingredientList li {
+  font-size: 0.9rem;
+  color: #5a4030;
+}
+
+.stepList {
+  margin: 0;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stepList li {
+  font-size: 0.9rem;
+  color: #5a4030;
+  line-height: 1.5;
+}

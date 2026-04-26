@@ -1,0 +1,125 @@
+/* ログイン・会員登録ページ共通スタイル */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fff8f0 0%, #ffe8d0 100%);
+  padding: 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d1a0e;
+  margin: 0 0 0.25rem;
+}
+
+.subtitle {
+  color: #8a6a50;
+  margin: 0 0 2rem;
+  font-size: 0.95rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a3728;
+}
+
+.field input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e8d5c4;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.field input:focus {
+  border-color: #e8732a;
+}
+
+.button {
+  margin-top: 0.5rem;
+  padding: 0.875rem;
+  background: #e8732a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.button:hover:not(:disabled) {
+  background: #cf5e1a;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #d94040;
+  font-size: 0.875rem;
+  margin: 0;
+  background: #fff0f0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.success {
+  color: #2d8a4a;
+  font-size: 0.875rem;
+  margin: 0;
+  background: #f0fff4;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.link {
+  margin-top: 1.5rem;
+  color: #8a6a50;
+  font-size: 0.9rem;
+}
+
+.link a {
+  color: #e8732a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}

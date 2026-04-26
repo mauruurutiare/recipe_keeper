@@ -1,0 +1,22 @@
+# 環境変数ファイル（Supabase認証情報など）
+.env
+.env.local
+.env.*.local
+
+# 依存パッケージ
+node_modules/
+
+# ビルド成果物
+dist/
+
+# エディタ
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ログ
+*.log
+npm-debug.log*
