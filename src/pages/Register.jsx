@@ -3,6 +3,29 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import styles from './Auth.module.css'
 
+// Supabaseのエラーメッセージを日本語に変換する
+function toJapaneseError(message) {
+  if (!message) return '登録に失敗しました。'
+  const m = message.toLowerCase()
+  if (m.includes('already registered') || m.includes('already been registered') || m.includes('user already exists')) {
+    return 'このメールアドレスはすでに登録されています。ログインしてください。'
+  }
+  if (m.includes('rate limit') || m.includes('email rate')) {
+    return 'メール送信の上限に達しました。しばらく時間をおいて再試行してください。'
+  }
+  if (m.includes('invalid email') || m.includes('unable to validate email')) {
+    return 'メールアドレスの形式が正しくありません。'
+  }
+  if (m.includes('password') && m.includes('6')) {
+    return 'パスワードは6文字以上で入力してください。'
+  }
+  if (m.includes('signup') && m.includes('disabled')) {
+    return '現在、新規登録を受け付けていません。'
+  }
+  // 上記以外は原文もあわせて表示して原因を特定しやすくする
+  return `登録に失敗しました。（${message}）`
+}
+
 export default function Register() {
   const { signUp } = useAuth()
   const navigate = useNavigate()
@@ -23,11 +46,15 @@ export default function Register() {
     }
 
     setLoading(true)
-    const { error } = await signUp(email, password)
+    const { data, error } = await signUp(email, password)
     if (error) {
-      setError('登録に失敗しました。すでに使用されているメールアドレスの可能性があります。')
+      setError(toJapaneseError(error.message))
+    } else if (!data.user) {
+      // メール確認が必要な設定かつ未確認ユーザーが再登録した場合、
+      // Supabaseはエラーなし・user=nullを返すことがある
+      setMessage('確認メールを送信しました。メールボックスをご確認ください。')
+      setTimeout(() => navigate('/login'), 3000)
     } else {
-      // メール確認が不要なプロジェクト設定の場合は直接遷移も可
       setMessage('登録が完了しました！確認メールをご確認ください。')
       setTimeout(() => navigate('/login'), 3000)
     }
