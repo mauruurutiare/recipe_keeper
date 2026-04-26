@@ -1,0 +1,119 @@
+/* モーダルオーバーレイ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+/* モーダル本体 */
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d1a0e;
+  margin: 0 0 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a3728;
+}
+
+.hint {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #a08878;
+  margin-left: 0.4rem;
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 0.7rem 0.9rem;
+  border: 2px solid #e8d5c4;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #e8732a;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.cancelBtn {
+  padding: 0.7rem 1.25rem;
+  background: transparent;
+  border: 2px solid #d0b8a8;
+  color: #6a4a38;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cancelBtn:hover:not(:disabled) {
+  background: #f5ece5;
+}
+
+.submitBtn {
+  padding: 0.7rem 1.5rem;
+  background: #e8732a;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #cf5e1a;
+}
+
+.submitBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
