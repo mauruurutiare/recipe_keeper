@@ -52,15 +52,7 @@ create table if not exists public.groups (
 
 alter table public.groups enable row level security;
 
--- メンバーであれば参照可（後述の group_members で判定）
-create policy "グループメンバーはグループを参照できる"
-  on public.groups for select
-  using (
-    id in (
-      select group_id from public.group_members where user_id = auth.uid()
-    )
-  );
-
+-- groupsのSELECTポリシーはgroup_membersテーブル作成後に追加する（下記を参照）
 create policy "認証済みユーザーはグループを作成できる"
   on public.groups for insert
   with check (auth.uid() = owner_id);
@@ -112,6 +104,15 @@ create policy "オーナーまたは本人のみメンバーを削除できる"
     user_id = auth.uid()
     or group_id in (
       select id from public.groups where owner_id = auth.uid()
+    )
+  );
+
+-- group_members が作成されたので groups の SELECT ポリシーをここで追加
+create policy "グループメンバーはグループを参照できる"
+  on public.groups for select
+  using (
+    id in (
+      select group_id from public.group_members where user_id = auth.uid()
     )
   );
 
