@@ -1,24 +1,38 @@
 import { supabase } from './supabase'
 
 // ============================================================
-// 自分が所属するグループ一覧を取得（オーナー・メンバー問わず）
+// 自分が所属するグループ一覧を取得
+// PostgREST の FK ジョインに頼らず profiles を別クエリで取得してマージする
 // ============================================================
 export async function fetchMyGroups() {
-  const { data, error } = await supabase
+  const { data: groups, error } = await supabase
     .from('groups')
     .select(`
       *,
-      group_members (
-        id,
-        user_id,
-        created_at,
-        profiles ( email )
-      )
+      group_members ( id, user_id, created_at )
     `)
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  if (!groups.length) return []
+
+  // 全メンバーの user_id をまとめて profiles を1回のクエリで取得
+  const userIds = [...new Set(groups.flatMap((g) => g.group_members.map((m) => m.user_id)))]
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, email')
+    .in('id', userIds)
+
+  const profileMap = Object.fromEntries((profiles || []).map((p) => [p.id, p]))
+
+  // メンバーに profiles データをマージして返す
+  return groups.map((g) => ({
+    ...g,
+    group_members: g.group_members.map((m) => ({
+      ...m,
+      profiles: profileMap[m.user_id] ?? null,
+    })),
+  }))
 }
 
 // ============================================================
@@ -33,7 +47,6 @@ export async function createGroup(userId, name) {
 
   if (groupError) throw groupError
 
-  // オーナー自身をメンバーとして追加
   const { error: memberError } = await supabase
     .from('group_members')
     .insert({ group_id: group.id, user_id: userId })
@@ -46,11 +59,7 @@ export async function createGroup(userId, name) {
 // グループを削除（メンバー・共有レシピはCASCADEで自動削除）
 // ============================================================
 export async function deleteGroup(groupId) {
-  const { error } = await supabase
-    .from('groups')
-    .delete()
-    .eq('id', groupId)
-
+  const { error } = await supabase.from('groups').delete().eq('id', groupId)
   if (error) throw error
 }
 
@@ -58,7 +67,6 @@ export async function deleteGroup(groupId) {
 // メールアドレスでユーザーを検索してメンバーに追加
 // ============================================================
 export async function addMemberByEmail(groupId, email) {
-  // profilesテーブルからメールアドレスでユーザーIDを検索
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('id')
@@ -94,22 +102,36 @@ export async function removeMember(groupId, userId) {
 
 // ============================================================
 // グループに共有されているレシピ一覧を取得
+// profiles も別クエリで取得してマージする
 // ============================================================
 export async function fetchSharedRecipes(groupId) {
-  const { data, error } = await supabase
+  const { data: shared, error } = await supabase
     .from('shared_recipes')
     .select(`
       id,
       shared_by,
       created_at,
-      profiles ( email ),
       recipes ( * )
     `)
     .eq('group_id', groupId)
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  if (!shared.length) return []
+
+  // 共有者の profiles を1回のクエリで取得
+  const sharedByIds = [...new Set(shared.map((s) => s.shared_by))]
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, email')
+    .in('id', sharedByIds)
+
+  const profileMap = Object.fromEntries((profiles || []).map((p) => [p.id, p]))
+
+  return shared.map((s) => ({
+    ...s,
+    profiles: profileMap[s.shared_by] ?? null,
+  }))
 }
 
 // ============================================================
