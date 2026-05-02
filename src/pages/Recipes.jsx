@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
+import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { fetchRecipes, createRecipe, updateRecipe, deleteRecipe } from '../lib/recipeApi'
+import { fetchMyGroups, shareRecipe } from '../lib/groupApi'
 import RecipeForm from '../components/RecipeForm'
 import styles from './Recipes.module.css'
 
@@ -24,6 +26,13 @@ export default function Recipes() {
 
   // 削除処理中のレシピID
   const [deletingId, setDeletingId] = useState(null)
+
+  // グループ共有モーダルの状態
+  const [shareTarget, setShareTarget] = useState(null) // 共有するレシピ
+  const [myGroups, setMyGroups] = useState([])
+  const [shareLoadingId, setShareLoadingId] = useState(null)
+  const [shareError, setShareError] = useState('')
+  const [shareSuccess, setShareSuccess] = useState('')
 
   // ============================================================
   // レシピ一覧をSupabaseから取得
@@ -124,6 +133,37 @@ export default function Recipes() {
     setFormError('')
   }
 
+  // ============================================================
+  // グループ共有モーダルを開く
+  // ============================================================
+  const openShareModal = async (recipe) => {
+    setShareTarget(recipe)
+    setShareError('')
+    setShareSuccess('')
+    try {
+      setMyGroups(await fetchMyGroups())
+    } catch (e) {
+      setShareError('グループの取得に失敗しました。')
+    }
+  }
+
+  // ============================================================
+  // レシピをグループに共有
+  // ============================================================
+  const handleShare = async (groupId) => {
+    setShareLoadingId(groupId)
+    setShareError('')
+    setShareSuccess('')
+    try {
+      await shareRecipe(groupId, shareTarget.id, user.id)
+      setShareSuccess('共有しました！')
+    } catch (e) {
+      setShareError(e.message)
+    } finally {
+      setShareLoadingId(null)
+    }
+  }
+
   const toggleCard = (id) => {
     setExpandedId((prev) => (prev === id ? null : id))
   }
@@ -140,6 +180,15 @@ export default function Recipes() {
             <span>🍽️</span>
             <h1>レシピ管理</h1>
           </div>
+          {/* ページナビゲーション */}
+          <nav className={styles.nav}>
+            <NavLink to="/recipes" className={({ isActive }) => isActive ? `${styles.navLink} ${styles.navActive}` : styles.navLink}>
+              📋 マイレシピ
+            </NavLink>
+            <NavLink to="/groups" className={({ isActive }) => isActive ? `${styles.navLink} ${styles.navActive}` : styles.navLink}>
+              👥 グループ
+            </NavLink>
+          </nav>
           <div className={styles.userArea}>
             <span className={styles.email}>{user?.email}</span>
             <button onClick={signOut} className={styles.signOutBtn}>
@@ -199,23 +248,37 @@ export default function Recipes() {
                   <span className={styles.category}>{recipe.genre}</span>
                 </div>
                 <div className={styles.cardActions} onClick={(e) => e.stopPropagation()}>
-                  {/* 編集ボタン */}
-                  <button
-                    className={styles.editBtn}
-                    onClick={() => openEditForm(recipe)}
-                    title="編集"
-                  >
-                    ✏️
-                  </button>
-                  {/* 削除ボタン */}
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={() => handleDelete(recipe.id)}
-                    disabled={deletingId === recipe.id}
-                    title="削除"
-                  >
-                    {deletingId === recipe.id ? '...' : '🗑️'}
-                  </button>
+                  {/* グループ共有ボタン（自分のレシピのみ） */}
+                  {recipe.user_id === user.id && (
+                    <button
+                      className={styles.shareBtn}
+                      onClick={() => openShareModal(recipe)}
+                      title="グループに共有"
+                    >
+                      👥
+                    </button>
+                  )}
+                  {/* 編集ボタン（自分のレシピのみ） */}
+                  {recipe.user_id === user.id && (
+                    <button
+                      className={styles.editBtn}
+                      onClick={() => openEditForm(recipe)}
+                      title="編集"
+                    >
+                      ✏️
+                    </button>
+                  )}
+                  {/* 削除ボタン（自分のレシピのみ） */}
+                  {recipe.user_id === user.id && (
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={() => handleDelete(recipe.id)}
+                      disabled={deletingId === recipe.id}
+                      title="削除"
+                    >
+                      {deletingId === recipe.id ? '...' : '🗑️'}
+                    </button>
+                  )}
                 </div>
                 <span className={styles.chevron}>
                   {expandedId === recipe.id ? '▲' : '▼'}
@@ -250,6 +313,43 @@ export default function Recipes() {
           ))}
         </div>
       </main>
+
+      {/* グループ共有モーダル */}
+      {shareTarget && (
+        <div className={styles.overlay}>
+          <div className={styles.shareModal}>
+            <h2 className={styles.shareModalTitle}>👥 グループに共有</h2>
+            <p className={styles.shareModalRecipe}>「{shareTarget.name}」を共有するグループを選んでください</p>
+
+            {shareError && <p className={styles.shareError}>{shareError}</p>}
+            {shareSuccess && <p className={styles.shareSuccess}>{shareSuccess}</p>}
+
+            {myGroups.length === 0 ? (
+              <p className={styles.noGroups}>グループがありません。先にグループを作成してください。</p>
+            ) : (
+              <ul className={styles.groupSelectList}>
+                {myGroups.map((g) => (
+                  <li key={g.id}>
+                    <button
+                      className={styles.groupSelectBtn}
+                      onClick={() => handleShare(g.id)}
+                      disabled={shareLoadingId === g.id}
+                    >
+                      <span>👥 {g.name}</span>
+                      <span className={styles.groupSelectMeta}>{g.group_members?.length}人</span>
+                      {shareLoadingId === g.id && <span className={styles.sharing}>共有中...</span>}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <button className={styles.shareCloseBtn} onClick={() => setShareTarget(null)}>
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 新規登録・編集フォーム（モーダル） */}
       {formMode && (

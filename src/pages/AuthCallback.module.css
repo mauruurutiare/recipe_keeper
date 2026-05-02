@@ -1,0 +1,157 @@
+/* 会員登録完了ページ */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fff8ee 0%, #ffe5c8 50%, #ffd4a8 100%);
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景に浮かぶ食材アイコン */
+.floatingIcons {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.floatingIcons span {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.25;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 0.8s);
+}
+
+.floatingIcons span:nth-child(1)  { top: 8%;  left: 5%; }
+.floatingIcons span:nth-child(2)  { top: 15%; left: 85%; }
+.floatingIcons span:nth-child(3)  { top: 40%; left: 3%; }
+.floatingIcons span:nth-child(4)  { top: 70%; left: 90%; }
+.floatingIcons span:nth-child(5)  { top: 80%; left: 10%; }
+.floatingIcons span:nth-child(6)  { top: 25%; left: 92%; }
+.floatingIcons span:nth-child(7)  { top: 55%; left: 88%; }
+.floatingIcons span:nth-child(8)  { top: 90%; left: 75%; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-18px) rotate(10deg); }
+}
+
+/* カード */
+.card {
+  position: relative;
+  background: white;
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow:
+    0 8px 32px rgba(232, 115, 42, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* お皿アイコン＋チェックバッジ */
+.plateWrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.25rem;
+}
+
+.plate {
+  font-size: 5rem;
+  line-height: 1;
+  animation: spin 0.6s ease-out 0.2s both;
+}
+
+@keyframes spin {
+  from { transform: rotate(-20deg) scale(0.7); opacity: 0; }
+  to   { transform: rotate(0deg)  scale(1);   opacity: 1; }
+}
+
+.checkBadge {
+  position: absolute;
+  bottom: 0;
+  right: -8px;
+  width: 28px;
+  height: 28px;
+  background: #4caf7d;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid white;
+  animation: popIn 0.3s ease 0.6s both;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2d1a0e;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  color: #7a5540;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0 0 1.5rem;
+}
+
+/* メッセージボックス */
+.messageBox {
+  background: linear-gradient(135deg, #fff8f0, #fff0e0);
+  border: 1.5px solid #f5d8b8;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+  text-align: left;
+}
+
+.messageBox p {
+  margin: 0.3rem 0;
+  color: #6a4428;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ボタン */
+.button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #e8732a, #f59340);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(232, 115, 42, 0.35);
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 115, 42, 0.45);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.loadingText {
+  color: #8a6a50;
+  font-size: 1.1rem;
+  padding: 2rem 0;
+}

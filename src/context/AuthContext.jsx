@@ -24,7 +24,15 @@ export function AuthProvider({ children }) {
   }, [])
 
   const signUp = (email, password) =>
-    supabase.auth.signUp({ email, password })
+    supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        // 確認メールのリンク先をアプリのコールバックページに設定
+        // window.location.origin を使うことでローカル・本番どちらでも動作する
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
 
   const signIn = (email, password) =>
     supabase.auth.signInWithPassword({ email, password })

@@ -72,6 +72,15 @@
   color: white;
 }
 
+/* ページナビゲーション */
+.nav { display: flex; gap: 0.25rem; flex: 1; }
+.navLink {
+  padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.875rem;
+  font-weight: 600; color: #8a6a50; text-decoration: none; transition: background 0.15s, color 0.15s;
+}
+.navLink:hover { background: #fff0e5; color: #e8732a; }
+.navActive { background: #fff0e5; color: #e8732a; }
+
 /* メインコンテンツ */
 .main {
   max-width: 1100px;
@@ -204,6 +213,7 @@
   flex-shrink: 0;
 }
 
+.shareBtn,
 .editBtn,
 .deleteBtn {
   padding: 0.3rem 0.5rem;
@@ -277,3 +287,35 @@
   color: #5a4030;
   line-height: 1.5;
 }
+
+/* グループ共有モーダル */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem;
+}
+.shareModal {
+  background: white; border-radius: 16px; padding: 2rem;
+  width: 100%; max-width: 400px; box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+}
+.shareModalTitle { font-size: 1.2rem; font-weight: 700; color: #2d1a0e; margin: 0 0 0.5rem; }
+.shareModalRecipe { font-size: 0.875rem; color: #7a5540; margin: 0 0 1.25rem; }
+.shareError { color: #d94040; background: #fff0f0; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.875rem; margin-bottom: 0.75rem; }
+.shareSuccess { color: #2d8a4a; background: #f0fff4; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.875rem; margin-bottom: 0.75rem; }
+.noGroups { font-size: 0.875rem; color: #a08878; margin-bottom: 1.25rem; }
+.groupSelectList { list-style: none; padding: 0; margin: 0 0 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.groupSelectBtn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1rem; background: #fdf8f4; border: 2px solid #f0e0d0;
+  border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: #2d1a0e;
+  transition: border-color 0.15s, background 0.15s; font-family: inherit;
+}
+.groupSelectBtn:hover:not(:disabled) { border-color: #e8732a; background: #fff5ee; }
+.groupSelectBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+.groupSelectMeta { font-size: 0.75rem; color: #8a6a50; font-weight: 400; }
+.sharing { font-size: 0.75rem; color: #e8732a; }
+.shareCloseBtn {
+  width: 100%; padding: 0.7rem; background: transparent; border: 2px solid #d0b8a8;
+  color: #6a4a38; border-radius: 8px; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: background 0.2s; font-family: inherit;
+}
+.shareCloseBtn:hover { background: #f5ece5; }
